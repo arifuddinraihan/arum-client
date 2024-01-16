@@ -1,8 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Login from "../pages/login";
-import Register from "../pages/register";
-import { adminPathas } from "./admin.routes";
+import AdminPathsArray from "./admin.routes";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import DynamicRouteCreator from "../utils/DynamicRouteCreator";
+
+// const adminPaths = ;
+
+// console.log(adminPaths)
 
 const router = createBrowserRouter([
   {
@@ -12,7 +17,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <App />,
-    children: adminPathas,
+    children: DynamicRouteCreator(AdminPathsArray),
   },
   {
     path: "/login",
