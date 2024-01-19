@@ -12,9 +12,9 @@ export interface TSidebarItems {
   children?: TSidebarItems[];
 }
 
-export interface TRouteUnionSidebarArray {
+export interface TUserPaths {
   name: string;
   path?: string;
   element?: ReactNode;
-  children?: TRouteUnionSidebarArray[];
+  children?: TUserPaths[];
 }

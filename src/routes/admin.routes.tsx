@@ -1,10 +1,10 @@
-import { TRouteUnionSidebarArray } from "../interface/route.interface";
+import { TUserPaths } from "../interface/route.interface";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import CreateAdmin from "../pages/admin/CreateAdmin";
 import CreateFaculty from "../pages/admin/CreateFaculty";
 import CreateStudent from "../pages/admin/CreateStudent";
 
-const AdminPathsArray: TRouteUnionSidebarArray[] = [
+const adminPaths: TUserPaths[] = [
   {
     name: "Dashboard",
     path: "dashboard",
@@ -32,7 +32,7 @@ const AdminPathsArray: TRouteUnionSidebarArray[] = [
   },
 ];
 
-export default AdminPathsArray;
+export default adminPaths;
 
 // Programmatic way for creating Admin Sidebar Array
 

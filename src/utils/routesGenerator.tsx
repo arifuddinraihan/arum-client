@@ -1,9 +1,9 @@
-import { TRoute, TRouteUnionSidebarArray } from "../interface/route.interface";
+import { TRoute, TUserPaths } from "../interface/route.interface";
 
 // Programmatic Function for creating routes array as per given array of dedicated section
 
-const DynamicRouteCreator = (Arr: TRouteUnionSidebarArray[]) => {
-  const newArr = Arr.reduce((acc: TRoute[], item) => {
+const routesGenerator = (paths: TUserPaths[]) => {
+  const routes = paths.reduce((acc: TRoute[], item) => {
     if (item.path && item.element) {
       acc.push({
         path: item.path,
@@ -14,7 +14,7 @@ const DynamicRouteCreator = (Arr: TRouteUnionSidebarArray[]) => {
     if (item.children) {
       item.children.forEach((child) => {
         acc.push({
-          path: child.path as string,
+          path: child.path!,
           element: child.element,
         });
       });
@@ -24,7 +24,7 @@ const DynamicRouteCreator = (Arr: TRouteUnionSidebarArray[]) => {
   }, []);
 
   // Returning the new array as [{ path : string, element : ReactNode }]
-  return newArr;
+  return routes;
 };
 
-export default DynamicRouteCreator;
+export default routesGenerator;
