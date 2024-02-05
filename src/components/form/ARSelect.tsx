@@ -1,18 +1,31 @@
 import { Form, Select } from "antd";
+import { Controller } from "react-hook-form";
 
-const ARSelect = ({ label }) => {
+type ARSelectProps = {
+  label: string;
+  name: string;
+  options: {
+    value: string;
+    label: string;
+    disabled?: boolean;
+  }[];
+};
+
+const ARSelect = ({ label, name, options }: ARSelectProps) => {
   return (
-    <Form.Item label={label}>
-      <Select
-        style={{ width: "100%" }}
-        options={[
-          { value: "jack", label: "Jack" },
-          { value: "lucy", label: "Lucy" },
-          { value: "Yiminghe", label: "yiminghe" },
-          { value: "disabled", label: "Disabled", disabled: true },
-        ]}
-      />
-    </Form.Item>
+    <Controller
+      name={name}
+      render={({ field }) => (
+        <Form.Item label={label}>
+          <Select
+            {...field}
+            style={{ width: "100%" }}
+            size="large"
+            options={options}
+          />
+        </Form.Item>
+      )}
+    />
   );
 };
 
