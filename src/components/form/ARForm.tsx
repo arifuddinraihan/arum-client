@@ -4,11 +4,13 @@ import {
   FieldValues,
   FormProvider,
   SubmitErrorHandler,
+  SubmitHandler,
   useForm,
 } from "react-hook-form";
 
 type TFormConfig = {
   defaultValues?: Record<string, any>;
+  resolver?: any;
 };
 
 type TARFormProps = {
@@ -16,18 +18,34 @@ type TARFormProps = {
   children: ReactNode;
 } & TFormConfig;
 
-const ARForm = ({ onSubmit, children, defaultValues }: TARFormProps) => {
+const ARForm = ({
+  onSubmit,
+  children,
+  defaultValues,
+  resolver,
+}: TARFormProps) => {
   const formConfig: TFormConfig = {};
 
   if (defaultValues) {
     formConfig["defaultValues"] = defaultValues;
   }
+  if (resolver) {
+    formConfig["resolver"] = resolver;
+  }
 
   const methods = useForm(formConfig);
 
+  const AROnSubmit: SubmitHandler<FieldValues> = (data) => {
+    // Handling the onSubmit which received from parent component
+    onSubmit(data);
+
+    // Resetting the form here
+    methods.reset();
+  };
+
   return (
     <FormProvider {...methods}>
-      <Form layout="vertical" onFinish={methods.handleSubmit(onSubmit)}>
+      <Form layout="vertical" onFinish={methods.handleSubmit(AROnSubmit)}>
         {children}
       </Form>
     </FormProvider>

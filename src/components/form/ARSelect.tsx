@@ -15,7 +15,7 @@ const ARSelect = ({ label, name, options }: ARSelectProps) => {
   return (
     <Controller
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <Form.Item label={label}>
           <Select
             {...field}
@@ -23,6 +23,11 @@ const ARSelect = ({ label, name, options }: ARSelectProps) => {
             size="large"
             options={options}
           />
+          {error && (
+            <small style={{ color: "red", marginTop: "2px" }}>
+              {error.message}
+            </small>
+          )}
         </Form.Item>
       )}
     />

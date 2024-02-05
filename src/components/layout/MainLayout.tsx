@@ -14,7 +14,7 @@ const MainLayout = () => {
   };
 
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ height: "100%" }}>
       {/* Menu Sidebar Here to handle role based sidebar */}
       <Sidebar />
       <Layout>
