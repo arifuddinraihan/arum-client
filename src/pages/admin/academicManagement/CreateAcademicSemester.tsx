@@ -2,13 +2,14 @@ import { Button, Col, Flex } from "antd";
 import ARForm from "../../../components/form/ARForm";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import ARSelect from "../../../components/form/ARSelect";
-import { semesterOptions } from "../../../constants/semester.const";
+import { semesterOptions } from "../../../constants/academicManagement.const";
 import { monthOptions } from "../../../constants/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { academicSemesterSchema } from "../../../schema/academicManagement.schemas";
 import { useCreateAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement.Api";
 import { toast } from "sonner";
 import { TResponse } from "../../../types/global";
+import { TAcademicSemester } from "../../../types";
 // import { useNavigate } from "react-router-dom";
 // import { useAppSelector } from "../../../redux/hooks";
 // import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
@@ -35,7 +36,9 @@ const CreateAcademicSemester = () => {
 
     const toastId = toast.loading("Creating semester...");
     try {
-      const res = (await addSemester(semesterData)) as TResponse;
+      const res = (await addSemester(
+        semesterData
+      )) as TResponse<TAcademicSemester>;
       console.log(res);
       if (res?.error) {
         toast.error(res?.error?.data?.message, { id: toastId });

@@ -1,5 +1,5 @@
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.Api";
-import { Button, Table } from "antd";
+import { Button, Pagination, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { TAcademicSemester, TQueryParams } from "../../../types";
 import { useState } from "react";
@@ -11,9 +11,17 @@ export type TTableData = Pick<
 
 const AcademicSemester = () => {
   // <TQueryParams[] | undefined> added in the state due to handling the state types during setting queryParams
-  const [params, setParams] = useState<TQueryParams[] | undefined>(undefined);
+  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [pagination, setPagination] = useState(1);
+  // Semester data GETALL Query
+  const { data: semesterData, isFetching } = useGetAllSemestersQuery([
+    { name: "limit", value: 3 },
+    { name: "page", value: pagination },
+    { name: "sort", value: "year" },
+    ...params,
+  ]);
 
-  const { data: semesterData, isFetching } = useGetAllSemestersQuery(params);
+  const semesterPaginateData = semesterData?.meta;
 
   const semesterTableData = semesterData?.data?.map(
     ({ _id, name, year, startMonth, endMonth }) => ({
@@ -102,12 +110,20 @@ const AcademicSemester = () => {
   };
 
   return (
-    <Table
-      columns={columns}
-      loading={isFetching}
-      dataSource={semesterTableData}
-      onChange={onChange}
-    />
+    <>
+      <Table
+        columns={columns}
+        loading={isFetching}
+        dataSource={semesterTableData}
+        onChange={onChange}
+        pagination={false}
+      />
+      <Pagination
+        onChange={(page) => setPagination(page)}
+        pageSize={semesterPaginateData?.limit}
+        total={semesterPaginateData?.total}
+      />
+    </>
   );
 };
 

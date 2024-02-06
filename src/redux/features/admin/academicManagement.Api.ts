@@ -1,4 +1,5 @@
 import {
+  TAcademicFaculty,
   TAcademicSemester,
   TQueryParams,
   TReduxResponse,
@@ -13,6 +14,7 @@ const academicManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["academicSemesters"],
     }),
     getAllSemesters: builder.query({
       query: (args) => {
@@ -31,15 +33,53 @@ const academicManagementApi = baseApi.injectEndpoints({
         };
       },
       transformResponse: (response: TReduxResponse<TAcademicSemester[]>) => {
+        // console.log(response);
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      providesTags: ["academicSemesters"],
+    }),
+    createAcademicFaculty: builder.mutation({
+      query: (data) => ({
+        url: "/academic-faculties/create-academic-faculty",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["academicFaculties"],
+    }),
+    getAllAcademicFaculties: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/academic-faculties",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TReduxResponse<TAcademicFaculty[]>) => {
         console.log(response);
         return {
           data: response?.data,
           meta: response?.meta,
         };
       },
+      providesTags: ["academicFaculties"],
     }),
   }),
 });
 
-export const { useCreateAcademicSemesterMutation, useGetAllSemestersQuery } =
-  academicManagementApi;
+export const {
+  useCreateAcademicSemesterMutation,
+  useGetAllSemestersQuery,
+  useCreateAcademicFacultyMutation,
+  useGetAllAcademicFacultiesQuery,
+} = academicManagementApi;
