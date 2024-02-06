@@ -4,7 +4,7 @@ import type { TableColumnsType, TableProps } from "antd";
 import { TAcademicSemester, TQueryParams } from "../../../types";
 import { useState } from "react";
 
-export type TTableData = Pick<
+type TTableData = Pick<
   TAcademicSemester,
   "name" | "year" | "startMonth" | "endMonth"
 >;

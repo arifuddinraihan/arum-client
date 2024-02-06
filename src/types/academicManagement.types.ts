@@ -21,3 +21,17 @@ export type TAcademicFaculty = {
 export type TAcademicFacultySchema = {
   name: string;
 };
+
+export type TAcademicDepartment = {
+  name: string;
+  academicFaculty: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type TAcademicDepartmentSchema = {
+  name: string;
+  academicFaculty: string;
+};

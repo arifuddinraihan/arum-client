@@ -1,39 +1,56 @@
-
-
-const currentYear = new Date().getFullYear();
-const yearOptions = [0, 1, 2, 3, 4].map((number) => ({
-  label: String(currentYear + number),
-  value: String(currentYear + number),
-}));
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import {
+  useCreateAcademicDepartmentMutation,
+  useGetAllAcademicFacultiesQuery,
+} from "../../../redux/features/admin/academicManagement.Api";
+import { toast } from "sonner";
+import { TAcademicDepartment, TResponse } from "../../../types";
+import { Button, Col, Flex } from "antd";
+import ARForm from "../../../components/form/ARForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { academicDepartmentSchema } from "../../../schema/academicManagement.schemas";
+import ARInput from "../../../components/form/ARInput";
+import ARSelect from "../../../components/form/ARSelect";
 
 const CreateAcademicDepartment = () => {
-  const [addSemester] = useCreateAcademicSemesterMutation();
-  // const navigate = useNavigate();
-  // const user = useAppSelector(selectCurrentUser);
+  const [addAcademicDepartment] = useCreateAcademicDepartmentMutation();
+
+  // Getting academic faculty list and making it as options for academicFaculty select options
+  const { data: academicFacultiesData } =
+    useGetAllAcademicFacultiesQuery(undefined);
+
+  const academicFacultyOptions = academicFacultiesData?.data?.map((item) => {
+    return {
+      value: item._id,
+      label: item.name,
+    };
+  });
+
+  // console.log(academicFacultyOptions);
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const name = semesterOptions[Number(data?.name) - 1]?.label;
-    const semesterData = {
-      name,
-      code: data?.name,
-      year: data?.year,
-      startMonth: data?.startMonth,
-      endMonth: data?.endMonth,
+    const academicDepartmentData = {
+      name: data?.name,
+      academicFaculty: data?.academicFaculty,
     };
 
-    const toastId = toast.loading("Creating semester...");
+    // console.log(academicDepartmentData);
+
+    const toastId = toast.loading("Creating Academic Department...");
     try {
-      const res = (await addSemester(
-        semesterData
-      )) as TResponse<TAcademicSemester>;
-      console.log(res);
+      const res = (await addAcademicDepartment(
+        academicDepartmentData
+      )) as TResponse<TAcademicDepartment>;
+      // console.log(res);
       if (res?.error) {
         toast.error(res?.error?.data?.message, { id: toastId });
       } else {
-        toast.success("Semester created successfully!", { id: toastId });
-        // navigate(`/${user?.role}/academic-semester`);
+        toast.success("Academic Department created successfully!", {
+          id: toastId,
+        });
       }
     } catch (error) {
-      toast.error("Unable to add Semester", { id: toastId });
+      toast.error("Unable to add Academic Department", { id: toastId });
     }
   };
   return (
@@ -41,16 +58,14 @@ const CreateAcademicDepartment = () => {
       <Col span={6}>
         <ARForm
           onSubmit={onSubmit}
-          resolver={zodResolver(academicSemesterSchema)}
+          resolver={zodResolver(academicDepartmentSchema)}
         >
-          <ARSelect label="Name" name="name" options={semesterOptions} />
-          <ARSelect label="Year" name="year" options={yearOptions} />
+          <ARInput label="Name" name="name" type="text" />
           <ARSelect
-            label="Start Month"
-            name="startMonth"
-            options={monthOptions}
+            label="Academic Faculty"
+            name="academicFaculty"
+            options={academicFacultyOptions}
           />
-          <ARSelect label="End Month" name="endMonth" options={monthOptions} />
           <Button htmlType="submit">Submit</Button>
         </ARForm>
       </Col>

@@ -3,7 +3,7 @@ import { TAcademicFaculty } from "../../../types";
 import { useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement.Api";
 import { Button, Pagination, Space, Table, TableColumnsType } from "antd";
 
-export type TTableData = Pick<TAcademicFaculty, "name">;
+type TTableData = Pick<TAcademicFaculty, "name">;
 
 const AcademicFaculty = () => {
   const [pagination, setPagination] = useState(1);

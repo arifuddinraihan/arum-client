@@ -1,4 +1,5 @@
 import {
+  TAcademicDepartment,
   TAcademicFaculty,
   TAcademicSemester,
   TQueryParams,
@@ -66,13 +67,46 @@ const academicManagementApi = baseApi.injectEndpoints({
         };
       },
       transformResponse: (response: TReduxResponse<TAcademicFaculty[]>) => {
-        console.log(response);
+        // console.log(response);
         return {
           data: response?.data,
           meta: response?.meta,
         };
       },
       providesTags: ["academicFaculties"],
+    }),
+    createAcademicDepartment: builder.mutation({
+      query: (data) => ({
+        url: "/academic-departments/create-academic-department",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["academicDepartments"],
+    }),
+    getAllAcademicDepartments: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/academic-departments",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TReduxResponse<TAcademicDepartment[]>) => {
+        console.log(response);
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      providesTags: ["academicDepartments"],
     }),
   }),
 });
@@ -82,4 +116,6 @@ export const {
   useGetAllSemestersQuery,
   useCreateAcademicFacultyMutation,
   useGetAllAcademicFacultiesQuery,
+  useCreateAcademicDepartmentMutation,
+  useGetAllAcademicDepartmentsQuery,
 } = academicManagementApi;
