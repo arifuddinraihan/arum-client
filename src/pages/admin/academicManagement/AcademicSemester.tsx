@@ -6,7 +6,7 @@ import { useState } from "react";
 
 type TTableData = Pick<
   TAcademicSemester,
-  "name" | "year" | "startMonth" | "endMonth"
+  "name" | "year" | "startMonth" | "endMonth" | "createdAt"
 >;
 
 const AcademicSemester = () => {
@@ -17,19 +17,20 @@ const AcademicSemester = () => {
   const { data: semesterData, isFetching } = useGetAllSemestersQuery([
     { name: "limit", value: 3 },
     { name: "page", value: pagination },
-    { name: "sort", value: "year" },
+    { name: "sort", value: "createdAt" },
     ...params,
   ]);
 
   const semesterPaginateData = semesterData?.meta;
 
   const semesterTableData = semesterData?.data?.map(
-    ({ _id, name, year, startMonth, endMonth }) => ({
+    ({ _id, name, year, startMonth, endMonth, createdAt }) => ({
       key: _id,
       name,
       startMonth,
       endMonth,
       year,
+      createdAt,
     })
   );
 
@@ -119,6 +120,7 @@ const AcademicSemester = () => {
         pagination={false}
       />
       <Pagination
+        style={{ marginTop: "8px" }}
         onChange={(page) => setPagination(page)}
         pageSize={semesterPaginateData?.limit}
         total={semesterPaginateData?.total}

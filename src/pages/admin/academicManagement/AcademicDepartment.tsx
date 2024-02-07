@@ -3,7 +3,7 @@ import { TAcademicDepartment } from "../../../types";
 import { useGetAllAcademicDepartmentsQuery } from "../../../redux/features/admin/academicManagement.Api";
 import { Button, Pagination, Space, Table, TableColumnsType } from "antd";
 
-type TTableData = Pick<TAcademicDepartment, "name">;
+type TTableData = Pick<TAcademicDepartment, "name" | "createdAt">;
 
 const AcademicDepartment = () => {
   const [pagination, setPagination] = useState(1);
@@ -12,15 +12,16 @@ const AcademicDepartment = () => {
     useGetAllAcademicDepartmentsQuery([
       { name: "limit", value: 5 },
       { name: "page", value: pagination },
-      { name: "sort", value: "name" },
+      { name: "sort", value: "createdAt" },
     ]);
 
   const academicFacultyPaginateData = academicDepartmentsData?.meta;
 
   const academicFacultyTableData = academicDepartmentsData?.data?.map(
-    ({ _id, name }) => ({
+    ({ _id, name, createdAt }) => ({
       key: _id,
       name,
+      createdAt,
     })
   );
 
@@ -53,6 +54,7 @@ const AcademicDepartment = () => {
         pagination={false}
       />
       <Pagination
+        style={{ marginTop: "8px" }}
         onChange={(page) => setPagination(page)}
         pageSize={academicFacultyPaginateData?.limit}
         total={academicFacultyPaginateData?.total}
