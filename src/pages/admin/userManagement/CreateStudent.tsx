@@ -1,7 +1,7 @@
-import { Button, Col, Divider, Row } from "antd";
+import { Button, Col, Divider, Form, Input, Row } from "antd";
 import ARForm from "../../../components/form/ARForm";
 import ARInput from "../../../components/form/ARInput";
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import ARSelect from "../../../components/form/ARSelect";
 import {
   useGetAllAcademicDepartmentsQuery,
@@ -9,58 +9,23 @@ import {
 } from "../../../redux/features/admin/academicManagement.Api";
 import { bloodGroupOptions, genderOptions } from "../../../constants/global";
 import ARDatePicker from "../../../components/form/ARDatePicker";
-
-// const studentData = {
-//   password: "student123",
-//   student: {
-//     name: {
-//       firstName: "Mr. Student2",
-//       middleName: "",
-//       lastName: "Good",
-//     },
-//     gender: "male",
-//     dateOfBirth: "1990-01-01",
-//     bloogGroup: "A+",
-
-//     email: "abcd@gmail.com",
-//     contactNo: "123567",
-//     emergencyContactNo: "987-654-3210",
-//     presentAddress: "123 Main St, Cityville",
-//     permanentAddress: "456 Oak St, Townsville",
-//     guardian: {
-//       fatherName: "James Doe",
-//       fatherOccupation: "Engineer",
-//       fatherContactNo: "111-222-3333",
-//       motherName: "Mary Doe",
-//       motherOccupation: "Teacher",
-//       motherContactNo: "444-555-6666",
-//     },
-//     localGuardian: {
-//       name: "Alice Johnson",
-//       occupation: "Doctor",
-//       contactNo: "777-888-9999",
-//       address: "789 Pine St, Villageton",
-//     },
-//     admissionSemester: "65663d516435f247a24e9169",
-//     academicDepartment: "656701b4adaebc55db21bdea",
-//     profileImg: "path/to/profile/image.jpg",
-//   },
-// };
+import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement.Api";
+import { toast } from "sonner";
+import { TCreatedStudentRes, TResponse } from "../../../types";
 
 const CreateStudent = () => {
   const studentDefaultValues = {
     name: {
-      firstName: "Arif ",
-      middleName: "Uddin ",
+      firstName: "Arif",
+      middleName: "Uddin",
       lastName: "Raihan",
     },
     gender: "male",
-
     bloogGroup: "B+",
 
     contactNo: "+8801621234451",
     emergencyContactNo: "987-654-3210",
-    presentAddress: "123 Main St, Cityville",
+    presentAddress: "123 Main St, City- Ville",
     permanentAddress: "456 Oak St, Townsville",
 
     guardian: {
@@ -79,8 +44,8 @@ const CreateStudent = () => {
       address: "789 Pine St, Villageton",
     },
 
-    admissionSemester: "65c1ccbadc4ddf742b4e21af",
-    academicDepartment: "65c32aface6b6cdabff165d7",
+    admissionSemester: "65c237420411087ddc023b5b",
+    academicDepartment: "65c26ae60411087ddc023c45",
   };
 
   const { data: sData, isLoading: sIsLoading } =
@@ -99,8 +64,39 @@ const CreateStudent = () => {
     label: item.name,
   }));
 
-  const handleStudentData: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const [addStudent] = useCreateStudentMutation();
+
+  // console.log(resData);
+
+  const handleStudentData: SubmitHandler<FieldValues> = async (data) => {
+    const studentData = {
+      password: "student123",
+      student: data,
+    };
+
+    const student = new FormData();
+
+    student.append("file", data.profileImg);
+    student.append("data", JSON.stringify(studentData));
+
+    // console.log(Object.fromEntries(student));
+
+    // addStudent(student);
+
+    const toastId = toast.loading("Creating student...");
+    try {
+      const res = (await addStudent(student)) as TResponse<TCreatedStudentRes>;
+      console.log(res);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { id: toastId });
+      } else {
+        toast.success(`Student: ${res?.data?.data?.id} created successfully!`, {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      toast.error("Unable to add Student", { id: toastId });
+    }
   };
   return (
     <Row>
@@ -133,6 +129,21 @@ const CreateStudent = () => {
                 options={bloodGroupOptions}
                 name="bloogGroup"
                 label="Blood Group"
+              />
+            </Col>
+            <Col>
+              <Controller
+                name="profileImg"
+                render={({ field: { onChange, value, ...field } }) => (
+                  <Form.Item label="Upload Picture">
+                    <Input
+                      {...field}
+                      type="file"
+                      value={value?.fileName}
+                      onChange={(e) => onChange(e.target.files?.[0])}
+                    />
+                  </Form.Item>
+                )}
               />
             </Col>
           </Row>
