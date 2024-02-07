@@ -4,6 +4,7 @@ import { Controller } from "react-hook-form";
 type ARSelectProps = {
   label: string;
   name: string;
+  disabled?: boolean;
   options:
     | {
         value: string;
@@ -13,7 +14,7 @@ type ARSelectProps = {
     | undefined;
 };
 
-const ARSelect = ({ label, name, options }: ARSelectProps) => {
+const ARSelect = ({ label, name, options, disabled }: ARSelectProps) => {
   return (
     <Controller
       name={name}
@@ -24,6 +25,7 @@ const ARSelect = ({ label, name, options }: ARSelectProps) => {
             style={{ width: "100%" }}
             size="large"
             options={options}
+            disabled={disabled}
           />
           {error && (
             <small style={{ color: "red", marginTop: "2px" }}>
