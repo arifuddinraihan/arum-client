@@ -9,6 +9,9 @@ import CreateAcademicSemester from "../pages/admin/academicManagement/CreateAcad
 import CreateAdmin from "../pages/admin/userManagement/CreateAdmin";
 import CreateFaculty from "../pages/admin/userManagement/CreateFaculty";
 import CreateStudent from "../pages/admin/userManagement/CreateStudent";
+import StudentDetails from "../pages/admin/userManagement/StudentDetails";
+import StudentTable from "../pages/admin/userManagement/StudentTable";
+import StudentUpdate from "../pages/admin/userManagement/StudentUpdate";
 
 const superAdminPaths: TUserPaths[] = [
   {
@@ -55,6 +58,24 @@ const superAdminPaths: TUserPaths[] = [
     name: "User Management",
     children: [
       {
+        name: "Create Student",
+        path: "create-student",
+        element: <CreateStudent />,
+      },
+      {
+        name: "Students List",
+        path: "student-data",
+        element: <StudentTable />,
+      },
+      {
+        path: "student-data/:studentId",
+        element: <StudentDetails />,
+      },
+      {
+        path: "update-student/:studentId",
+        element: <StudentUpdate />,
+      },
+      {
         name: "Create Admin",
         path: "create-admin",
         element: <CreateAdmin />,
@@ -63,11 +84,6 @@ const superAdminPaths: TUserPaths[] = [
         name: "Create Faculty",
         path: "create-faculty",
         element: <CreateFaculty />,
-      },
-      {
-        name: "Create Student",
-        path: "create-student",
-        element: <CreateStudent />,
       },
     ],
   },
