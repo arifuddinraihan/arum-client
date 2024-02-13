@@ -44,8 +44,8 @@ const CreateStudent = () => {
       address: "789 Pine St, Villageton",
     },
 
-    admissionSemester: "65c237420411087ddc023b5b",
-    academicDepartment: "65c26ae60411087ddc023c45",
+    admissionSemester: "65c1ccbadc4ddf742b4e21af",
+    academicDepartment: "65c32a4ece6b6cdabff165bc",
   };
 
   const { data: sData, isLoading: sIsLoading } =

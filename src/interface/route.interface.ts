@@ -1,20 +1,22 @@
 import { ReactNode } from "react";
 
-export interface TRoute {
+export type TRoute = {
   path: string;
   element?: ReactNode;
   children?: TRoute[];
-}
+};
 
-export interface TSidebarItems {
-  key: string;
-  label: ReactNode;
-  children?: TSidebarItems[];
-}
+export type TSidebarItems =
+  | {
+      key: string | undefined;
+      label: ReactNode;
+      children?: TSidebarItems[];
+    }
+  | undefined;
 
-export interface TUserPaths {
-  name: string;
+export type TUserPaths = {
+  name?: string;
   path?: string;
   element?: ReactNode;
   children?: TUserPaths[];
-}
+};
